@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: covidoingress
+spec:
+  rules:
+  - host: covido.org
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: covidoclusteripservice
+            port: 
+              number: 8080
+
+
+# The issue is most likely coming from the rewrite that you have in your ingress manifest.
+
+#     nginx.ingress.kubernetes.io/rewrite-target: /
+
+# this means that when the ingress receives the request from the client it takes the path portion of the url and rewrites it to be /, before passing it down to your backend, which in turn results in backend returning the root page of your website.
